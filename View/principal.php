@@ -30,7 +30,18 @@
 
 <body class="w3-light-grey">
 
-    <nav class="w3-sidebar w3-bar-block w3-center w3-blue ">
+    include_once '../Model/Usuario.php';
+if(!isset($_SESSION))
+{
+session_start();
+}
+value="<?php echo unserialize($_SESSION['Usuario'])->getID();?>"
+value="<?php echo unserialize($_SESSION['Usuario'])->getNome();?>"
+value="<?php echo unserialize($_SESSION['Usuario'])->getDataNascimento();?>"
+value="<?php echo unserialize($_SESSION['Usuario'])->getCPF();?>"
+value="<?php echo unserialize($_SESSION['Usuario'])->getEmail();?>"
+
+<nav class="w3-sidebar w3-bar-block w3-center w3-blue ">
         <a href="#home" class="w3-bar-item w3-button w3-block n w3-cell w3-hover-light-grey w3-hover-text-cyan w3-textlight-grey">
             <i class="fa fa-home w3-xxlarge"></i>
             <p>HOME</p>
@@ -69,7 +80,7 @@
             <h2 class="w3-text-cyan">Dados Pessoais</h2>
         </div>
 
-        <form action="" method="post" class=" w3-row w3-light-grey w3-text-blue w3-margin" style="width:70%;">
+        <form action="/Controller/Navegacao.php" method="post" class=" w3-row w3-light-grey w3-text-blue w3-margin" style="width:70%;">
             <input class="w3-input w3-border w3-round-large" name="txtID" type="hidden" value="">
             <div class="w3-row w3-section">
                 <div class="w3-col" style="width:11%;">
@@ -85,7 +96,7 @@
             <h2 class="w3-text-cyan">Formação</h2>
         </div>
 
-        <form action="" method="post" class=" w3-row w3-light-grey w3-text-blue w3-margin" style="width:70%;">
+        <form action="/Controller/Navegacao.php" method="post" class=" w3-row w3-light-grey w3-text-blue w3-margin" style="width:70%;">
             <div class="w3-row w3-center">
                 <div class="w3-col" style="width:50%;">
                     Data Inicial
@@ -150,7 +161,7 @@
             <h2 class="w3-text-cyan">Experiência Profissional</h2>
         </div>
 
-        <form action=" " method="post" class=" w3-row w3-light-grey w3-text-blue w3-margin" style="width: 70%;">
+        <form action="/Controller/Navegacao.php" method="post" class=" w3-row w3-light-grey w3-text-blue w3-margin" style="width: 70%;">
             <div class="w3-row w3-center">
                 <div class="w3-col" style="width:50%;">
                     Data Inicial
@@ -224,7 +235,7 @@
             <h2 class="w3-text-cyan">Outras Formações</h2>
         </div>
 
-        <form action="" method="post" class=" w3-row w3-light-grey w3-text-blue w3-margin" style="width:70%;">
+        <form action="/Controller/Navegacao.php" method="post" class=" w3-row w3-light-grey w3-text-blue w3-margin" style="width:70%;">
             <div class="w3-row w3-center">
                 <div class="w3-col" style="width:50%;">
                     Data Inicial
