@@ -1,3 +1,18 @@
+<?php
+// =======================================================
+// PHP CONSOLIDADO NO TOPO
+// =======================================================
+include_once '../Controller/FormacaoAcadController.php';
+include_once '../Controller/ExperienciaProfissionalController.php'; // Adicionado, pois estava sendo usado (new ExperienciaProfissionalController)
+include_once '../Model/Usuario.php';
+
+if (!isset($_SESSION)) {
+    session_start();
+}
+
+// Armazena o usuário da sessão em uma variável para facilitar o uso
+$usuario = isset($_SESSION['Usuario']) ? unserialize($_SESSION['Usuario']) : null;
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -30,18 +45,7 @@
 
 <body class="w3-light-grey">
 
-    include_once '../Model/Usuario.php';
-if(!isset($_SESSION))
-{
-session_start();
-}
-value="<?php echo unserialize($_SESSION['Usuario'])->getID();?>"
-value="<?php echo unserialize($_SESSION['Usuario'])->getNome();?>"
-value="<?php echo unserialize($_SESSION['Usuario'])->getDataNascimento();?>"
-value="<?php echo unserialize($_SESSION['Usuario'])->getCPF();?>"
-value="<?php echo unserialize($_SESSION['Usuario'])->getEmail();?>"
-
-<nav class="w3-sidebar w3-bar-block w3-center w3-blue ">
+    <nav class="w3-sidebar w3-bar-block w3-center w3-blue ">
         <a href="#home" class="w3-bar-item w3-button w3-block n w3-cell w3-hover-light-grey w3-hover-text-cyan w3-textlight-grey">
             <i class="fa fa-home w3-xxlarge"></i>
             <p>HOME</p>
@@ -81,13 +85,15 @@ value="<?php echo unserialize($_SESSION['Usuario'])->getEmail();?>"
         </div>
 
         <form action="/Controller/Navegacao.php" method="post" class=" w3-row w3-light-grey w3-text-blue w3-margin" style="width:70%;">
-            <input class="w3-input w3-border w3-round-large" name="txtID" type="hidden" value="">
+            <input class="w3-input w3-border w3-round-large" name="txtID" type="hidden" 
+                   value="<?php echo $usuario ? $usuario->getID() : ''; ?>">
             <div class="w3-row w3-section">
                 <div class="w3-col" style="width:11%;">
                     <i class="w3-xxlarge fa fa-user"></i>
                 </div>
                 <div class="w3-rest">
-                    <input class="w3-input w3-border w3-round-large" name="txtNome" type="text" placeholder="Nome Completo" value="">
+                    <input class="w3-input w3-border w3-round-large" name="txtNome" type="text" placeholder="Nome Completo" 
+                           value="<?php echo $usuario ? $usuario->getNome() : ''; ?>">
                 </div>
             </div>
             </form>
@@ -122,7 +128,7 @@ value="<?php echo unserialize($_SESSION['Usuario'])->getEmail();?>"
                         <input class="w3-input w3-border w3-round-large" name="txtFimFA" type="date" placeholder="">
                     </div>
                 </div>
-            </div> 
+            </div>
             <div>
                 <div class="w3-row w3-section">
                     <div class="w3-col" style="width:7%;">
@@ -140,7 +146,7 @@ value="<?php echo unserialize($_SESSION['Usuario'])->getEmail();?>"
                     </div>
                 </div>
             </div>
-        </form> 
+        </form>
 
         <div class="w3-container">
             <table class="w3-table-all w3-centered">
@@ -153,6 +159,29 @@ value="<?php echo unserialize($_SESSION['Usuario'])->getEmail();?>"
                     </tr>
                 </thead>
                 <tbody>
+                    <?php
+                    if ($usuario) { // Verifica se o usuário existe na sessão
+                        $fCon = new FormacaoAcadController();
+                        $results = $fCon->gerarLista($usuario->getID());
+                        if ($results != null)
+                            while ($row = $results->fetch_object()) {
+                                echo '<tr>';
+                                echo '<td style="width: 10%;">' . $row->inicio . '</td>';
+                                echo '<td style="width: 10%;">' . $row->fim . '</td>';
+                                echo '<td style="width: 65%;">' . $row->descricao . '</td>';
+                                // CORREÇÃO: </form> movido para dentro do </td>
+                                echo '<td style="width: 5%;">
+                                        <form action="/Controller/Navegacao.php" method="post">
+                                            <input type="hidden" name="id" value="' . $row->idformacaoAcademica . '">
+                                            <button name="btnExcluirFA" class="w3-button w3-block w3-blue w3-cell w3-round-large">
+                                                <i class="fa fa-user-times"></i> 
+                                            </button>
+                                        </form>
+                                      </td>';
+                                echo '</tr>';
+                            }
+                    }
+                    ?>
                 </tbody>
             </table>
         </div>
@@ -187,7 +216,7 @@ value="<?php echo unserialize($_SESSION['Usuario'])->getEmail();?>"
                         <input class="w3-input w3-border w3-round-large" name="txtFimEP" type="date" placeholder="">
                     </div>
                 </div>
-            </div> 
+            </div>
             <div>
                 <div class="w3-row w3-section">
                     <div class="w3-col" style="width:7%;">
@@ -224,13 +253,37 @@ value="<?php echo unserialize($_SESSION['Usuario'])->getEmail();?>"
                         <th>Empresa</th>
                         <th>Descrição</th>
                         <th>Apagar</th>
-                    </tr> 
+                    </tr>
                 </thead>
                 <tbody>
+                    <?php
+                     if ($usuario) { // Verifica se o usuário existe na sessão
+                        $ePro = new ExperienciaProfissionalController();
+                        $results = $ePro->gerarLista($usuario->getID());
+                        if ($results != null)
+                            while ($row = $results->fetch_object()) {
+                                echo '<tr>';
+                                echo '<td style="width: 10%;">' . $row->inicio . '</td>';
+                                echo '<td style="width: 10%;">' . $row->fim . '</td>';
+                                echo '<td style="width: 10%;">' . $row->empresa . '</td>';
+                                echo '<td style="width: 65%;">' . $row->descricao . '</td>';
+                                // CORREÇÃO: </form> movido para dentro do </td>
+                                echo '<td style="width: 5%;">
+                                        <form action="/Controller/Navegacao.php" method="post">
+                                            <input type="hidden" name="idEP" value="' . $row->idexperienciaprofissional . '">
+                                            <button name="btnExcluirEP" class="w3-button w3-block w3-blue w3-cell w3-round-large">
+                                                <i class="fa fa-user-times"></i> 
+                                            </button>
+                                        </form>
+                                      </td>';
+                                echo '</tr>';
+                            }
+                    }
+                    ?>
                 </tbody>
             </table>
         </div>
-        
+
         <div class="w3-padding-128 w3-content w3-text-grey" id="outrasFormacoes">
             <h2 class="w3-text-cyan">Outras Formações</h2>
         </div>
@@ -261,7 +314,7 @@ value="<?php echo unserialize($_SESSION['Usuario'])->getEmail();?>"
                         <input class="w3-input w3-border w3-round-large" name="txtFimOF" type="date" placeholder="">
                     </div>
                 </div>
-            </div> 
+            </div>
             <div>
                 <div class="w3-row w3-section">
                     <div class="w3-col" style="width:7%;">
@@ -279,7 +332,7 @@ value="<?php echo unserialize($_SESSION['Usuario'])->getEmail();?>"
                     </div>
                 </div>
             </div>
-        </form> 
+        </form>
 
         <div class="w3-container">
             <table class="w3-table-all w3-centered">
@@ -292,10 +345,11 @@ value="<?php echo unserialize($_SESSION['Usuario'])->getEmail();?>"
                     </tr>
                 </thead>
                 <tbody>
-                    </tbody>
+                </tbody>
             </table>
         </div>
 
-    </div> </body>
+    </div>
+</body>
 
 </html>
