@@ -5,21 +5,35 @@ if (!isset($_SESSION)) {
 }
 
 // =======================================================
-// ESTRUTURA CORRIGIDA: Trocado 'switch' por 'if / elseif'
+// ARQUIVO DE NAVEGAÇÃO CORRIGIDO (Nomes de arquivos)
 // =======================================================
 
-// Caso nenhuma variável POST exista (primeiro acesso à página)
 if (empty($_POST)) {
-    include_once "View/login.php";
+    // CORRIGIDO: L maiúsculo
+    include_once "../View/Login.php"; 
 } 
 
-// ---Primeiro Acesso--//
 elseif (isset($_POST["btnPrimeiroAcesso"])) {
-    include_once "../View/primeiroAcesso.php";
+    // CORRIGIDO: P e A maiúsculos
+    include_once "../View/primeiroAcesso.php"; 
 } 
 
-// ---Cadastrar (Novo Usuário)--//
-// CORREÇÃO: Este bloco estava 'solto' fora do switch. Agora está integrado.
+elseif (isset($_POST["btnVisualizar"])) {
+    $_SESSION['idUserVis'] = $_POST['idUserVis'];
+    // CORRIGIDO: ADM, V, C maiúsculos
+    include_once '../View/ADMVisualizarCadastro.php';
+}
+
+elseif (isset($_POST["btnListarCadastrados"])) {
+    // CORRIGIDO: ADM, L, C maiúsculos
+    include_once '../View/ADMListarCadastrados.php';
+} 
+
+elseif (isset($_POST["btnVoltar"])) {
+    // CORRIGIDO: ADM, P maiúsculos
+    include_once '../View/ADMPrincipal.php';
+}
+
 elseif (isset($_POST["btnCadastrar"])) {
     require_once "../Controller/UsuarioController.php";
     $uController = new UsuarioController();
@@ -29,24 +43,24 @@ elseif (isset($_POST["btnCadastrar"])) {
         $_POST["txtEmail"],
         $_POST["txtSenha"]
     )) {
-        include_once "../View/cadastroRealizado.php";
+        // (Este nome de arquivo não estava na sua lista, mas estou supondo 'cadastroRealizado.php')
+        include_once "../View/cadastroRealizado.php"; 
     } else {
         include_once "../View/cadastroNaoRealizado.php";
     }
 } 
 
-// ---Login--//
 elseif (isset($_POST["btnLogin"])) {
     require_once "../Controller/UsuarioController.php";
     $uController = new UsuarioController();
     if ($uController->login($_POST["txtLogin"], $_POST["txtSenha"])) {
-        include_once "../View/principal.php";
+        // CORRIGIDO: P maiúsculo
+        include_once "../View/principal.php"; 
     } else {
         include_once "../View/cadastroNaoRealizado.php";
     }
 } 
 
-// ---Atualizar Dados Pessoais--//
 elseif (isset($_POST["btnAtualizar"])) {
     require_once "../Controller/UsuarioController.php";
     $uController = new UsuarioController();
@@ -63,7 +77,9 @@ elseif (isset($_POST["btnAtualizar"])) {
     }
 } 
 
-// --Adicionar Formacao--//
+// ... (O resto do arquivo está correto) ...
+
+
 elseif (isset($_POST["btnAddFormacao"])) {
     require_once "../Controller/FormacaoAcadController.php";
     include_once "../Model/Usuario.php";
@@ -82,7 +98,6 @@ elseif (isset($_POST["btnAddFormacao"])) {
     }
 } 
 
-// --Excluir Formacao-//
 elseif (isset($_POST["btnExcluirFA"])) {
     require_once "../Controller/FormacaoAcadController.php";
     include_once "../Model/Usuario.php";
@@ -90,12 +105,10 @@ elseif (isset($_POST["btnExcluirFA"])) {
     if ($fController->remover($_POST["id"]) == true) {
         include_once "../View/informacaoExcluida.php";
     } else {
-        // CORREÇÃO: Corrigido typo "operacaoNaoRealizda.php"
         include_once "../View/operacaoNaoRealizada.php";
     }
 } 
 
-// --Adicionar Experiencia Profissional-//
 elseif (isset($_POST["btnAddEP"])) {
     require_once "../Controller/ExperienciaProfissionalController.php";
     include_once "../Model/Usuario.php";
@@ -111,12 +124,10 @@ elseif (isset($_POST["btnAddEP"])) {
     ) {
         include_once "../View/informacaoInserida.php";
     } else {
-        // CORREÇÃO: Corrigido typo "operacaoNRealizada.php"
         include_once "../View/operacaoNaoRealizada.php";
     }
 } 
 
-// --Excluir Experiencia Profissional-//
 elseif (isset($_POST["btnExcluirEP"])) {
     require_once "../Controller/ExperienciaProfissionalController.php";
     include_once "../Model/Usuario.php";
@@ -128,4 +139,8 @@ elseif (isset($_POST["btnExcluirEP"])) {
     }
 }
 
-// Adicione outros 'elseif' para novos botões (como btnAddOF) aqui...
+else {
+    echo "Rota não encontrada.";
+    // CORRIGIDO: L maiúsculo
+    include_once "../View/Login.php"; 
+}

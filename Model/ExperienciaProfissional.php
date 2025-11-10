@@ -69,7 +69,7 @@ class ExperienciaProfissional {
     }
 
     // CORREÇÃO 2: As funções abaixo foram movidas para DENTRO da classe.
-    public function inserirBD()
+   public function inserirBD()
     {
         require_once 'ConexaoBD.php';
         $con = new ConexaoBD();
@@ -78,14 +78,18 @@ class ExperienciaProfissional {
             die("Connection failed: " . $conn->connect_error);
         }
         
-        // CORREÇÃO 3: Query SQL colocada em uma única linha.
-        $sql = "INSERT INTO experienciaprofissional (idusuario, inicio, fim, empresa, descricao) VALUES ('".$this->idusuario."','".$this->inicio."','".$this->fim."','".$this->empresa."','".$this->descricao."')";
+        $sql = "INSERT INTO experienciaprofissional (idusuario, inicio, fim, empresa, descricao) VALUES (?, ?, ?, ?, ?)";
+        $stmt = $conn->prepare($sql);
+        // "issss" = integer, string, string, string, string
+        $stmt->bind_param("issss", $this->idusuario, $this->inicio, $this->fim, $this->empresa, $this->descricao);
         
-        if ($conn->query($sql) === true) {
-            $this->id = mysqli_insert_id($conn);
+        if ($stmt->execute()) {
+            $this->id = $conn->insert_id;
+            $stmt->close();
             $conn->close();
             return true;
         } else {
+            $stmt->close();
             $conn->close();
             return false;
         }
@@ -99,11 +103,18 @@ class ExperienciaProfissional {
         if ($conn->connect_error) {
             die("Connection failed: " . $conn->connect_error);
         }
-        $sql = "DELETE FROM experienciaprofissional WHERE idexperienciaprofissional = '".$id ."';";
-        if ($conn->query($sql) === true) {
+        
+        $sql = "DELETE FROM experienciaprofissional WHERE idexperienciaprofissional = ?";
+        $stmt = $conn->prepare($sql);
+        // "i" = integer
+        $stmt->bind_param("i", $id);
+
+        if ($stmt->execute()) {
+            $stmt->close();
             $conn->close();
             return true;
         } else {
+            $stmt->close();
             $conn->close();
             return false;
         }
@@ -117,8 +128,16 @@ class ExperienciaProfissional {
         if ($conn->connect_error) {
             die("Connection failed: " . $conn->connect_error);
         }
-        $sql = "SELECT * FROM experienciaprofissional WHERE idusuario = '".$idusuario."'" ;
-        $re = $conn->query($sql);
+        
+        $sql = "SELECT * FROM experienciaprofissional WHERE idusuario = ?";
+        $stmt = $conn->prepare($sql);
+        // "i" = integer
+        $stmt->bind_param("i", $idusuario);
+        
+        $stmt->execute();
+        $re = $stmt->get_result();
+        
+        $stmt->close();
         $conn->close();
         return $re;
     }

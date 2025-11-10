@@ -5,8 +5,7 @@ if (!isset($_SESSION)) {
 }
 
 class UsuarioController
-{ // <-- Chave de ABERTURA da classe
-
+{
     public function inserir($nome, $cpf, $email, $senha)
     {
         require_once '../Model/Usuario.php';
@@ -18,9 +17,8 @@ class UsuarioController
         $r = $usuario->inserirBD();
         $_SESSION['Usuario'] = serialize($usuario);
         return $r;
-    } // <-- Fechamento do método inserir
+    }
 
-    // CORREÇÃO: Este método estava fora da classe
     public function atualizar($id, $nome, $cpf, $email, $dataNascimento)
     {
         require_once '../Model/Usuario.php';
@@ -33,9 +31,8 @@ class UsuarioController
         $r = $usuario->atualizarBD();
         $_SESSION['Usuario'] = serialize($usuario);
         return $r;
-    } // <-- CORREÇÃO: Adicionada a '}' que faltava para fechar o método atualizar
+    }
 
-    // CORREÇÃO: Este método estava fora da classe
     public function login($cpf, $senha)
     {
         require_once '../Model/Usuario.php';
@@ -48,6 +45,24 @@ class UsuarioController
         } else {
             return false;
         }
-    } // <-- Fechamento do método login
+    }
 
-} // <-- CORREÇÃO: Chave de FECHAMENTO da classe movida para o final
+    public function buscarPorId($id)
+    {
+        require_once '../Model/Usuario.php';
+        $usuario = new Usuario();
+        
+        if ($usuario->carregarUsuarioPorID($id)) {
+            return $usuario;
+        } else {
+            return null;
+        }
+    }
+    
+    public function gerarLista()
+    {
+        require_once '../Model/Usuario.php';
+        $usuario = new Usuario();
+        return $usuario->listaCadastrados();
+    }
+}

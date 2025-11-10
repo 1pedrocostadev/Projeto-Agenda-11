@@ -59,7 +59,7 @@ class FormacaoAcad
         return $this->descricao;
     }
 
-    public function inserirBD()
+   public function inserirBD()
     {
         require_once 'ConexaoBD.php';
         $con = new ConexaoBD();
@@ -68,14 +68,18 @@ class FormacaoAcad
             die("Connection failed: " . $conn->connect_error);
         }
 
-        // CORREÇÃO: Query SQL colocada em uma única linha para evitar erro de sintaxe.
-        $sql = "INSERT INTO formacaoAcademica (idusuario, inicio, fim, descricao) VALUES ('".$this->idusuario."','".$this->inicio."','".$this->fim."','".$this->descricao."')";
-        
-        if ($conn->query($sql) === true) {
-            $this->id = mysqli_insert_id($conn);
+        $sql = "INSERT INTO formacaoAcademica (idusuario, inicio, fim, descricao) VALUES (?, ?, ?, ?)";
+        $stmt = $conn->prepare($sql);
+        // "isss" = integer, string, string, string
+        $stmt->bind_param("isss", $this->idusuario, $this->inicio, $this->fim, $this->descricao);
+
+        if ($stmt->execute()) {
+            $this->id = $conn->insert_id;
+            $stmt->close();
             $conn->close();
             return true;
         } else {
+            $stmt->close();
             $conn->close();
             return false;
         }
@@ -89,11 +93,18 @@ class FormacaoAcad
         if ($conn->connect_error) {
             die("Connection failed: " . $conn->connect_error);
         }
-        $sql = "DELETE FROM formacaoAcademica WHERE idformacaoAcademica = '".$id ."';";
-        if ($conn->query($sql) === true) {
+        
+        $sql = "DELETE FROM formacaoAcademica WHERE idformacaoAcademica = ?";
+        $stmt = $conn->prepare($sql);
+        // "i" = integer
+        $stmt->bind_param("i", $id);
+        
+        if ($stmt->execute()) {
+            $stmt->close();
             $conn->close();
             return true;
         } else {
+            $stmt->close();
             $conn->close();
             return false;
         }
@@ -107,12 +118,18 @@ class FormacaoAcad
         if ($conn->connect_error) {
             die("Connection failed: " . $conn->connect_error);
         }
-        $sql = "SELECT * FROM formacaoAcademica WHERE idusuario = '".$idusuario."'" ;
-        $re = $conn->query($sql);
+        
+        $sql = "SELECT * FROM formacaoAcademica WHERE idusuario = ?";
+        $stmt = $conn->prepare($sql);
+        // "i" = integer
+        $stmt->bind_param("i", $idusuario);
+        
+        $stmt->execute();
+        $re = $stmt->get_result();
+        
+        $stmt->close();
         $conn->close();
         return $re;
     }
-
-// CORREÇÃO FINAL: Esta chave fecha a CLASSE e agora está no lugar correto.
 }
 ?>
