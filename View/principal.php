@@ -346,7 +346,6 @@ Data Final
  </tr>
 </thead> 
  <?php
- // Adiciona a listagem de Outras Formações
  $oCon = new OutrasFormacoesController();
  $results = $oCon->gerarLista (unserialize($_SESSION['Usuario'])->getID());
  if($results != null)
@@ -368,7 +367,7 @@ Data Final
 </table>
 </div>
 
-<?php /* Fim do <div id="main"> */ ?>
+<?php  ?>
 </center> 
 </div> 
 </body>

@@ -8,7 +8,6 @@ class Usuario
     private $dataNascimento;
     private $senha;
 
-    // Getters e Setters
     public function setID($id) { $this->id = $id; }
     public function getID() { return $this->id; }
     public function setNome($nome) { $this->nome = $nome; }
@@ -21,8 +20,6 @@ class Usuario
     public function getDataNascimento() { return $this->dataNascimento; }
     public function setSenha($senha) { $this->senha = $senha; }
     public function getSenha() { return $this->senha; }
-
-    // --- Métodos de Banco de Dados ---
 
     public function inserirBD()
     {

@@ -35,7 +35,7 @@ placeholder="Login CPF (ex.: 33333333333)">
         style="width: 90%;">Entrar</button>
     </div>
     <div class="w3-half">
-        <button name="btnPrimeiroAcesso" class="w3-button w3-block w3-margin w3-blue w3-cellw3-roundlarge" style="width: 90%;">Primeiro Acesso?</button>
+        <button name="btnPrimeiroAcesso" class="w3-button w3-block w3-margin w3-blue w3-cellw3-roundlarge" style="width: 90%;">Primeiro Acesso</button>
     </div>
     
     <div class="w3-center" style="">

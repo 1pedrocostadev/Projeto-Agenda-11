@@ -52,16 +52,13 @@ class UsuarioController{
     {
         require_once 'Model/Usuario.php';
         $u = new Usuario();
-        // Chama a função 'listaCadastrados' do Model/Usuario.php
         return $results = $u->listaCadastrados(); 
     }
 
-    // Método para ver perfil 
     public function visualizarUsuario($idusuario)
     {
         require_once 'Model/Usuario.php';
         $usuario = new Usuario();
-        // Chama a função 'carregarUsuarioPorID' do Model/Usuario.php
         $usuario->carregarUsuarioPorID($idusuario); 
         return $usuario;
     }

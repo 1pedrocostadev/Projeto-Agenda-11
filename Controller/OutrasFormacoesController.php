@@ -5,7 +5,6 @@ if(!isset($_SESSION))
 }
 class OutrasFormacoesController{
 
-    // Método para o botão btnAddOF
     public function inserir($inicio, $fim, $descricao, $idusuario) {
         require_once 'Model/OutrasFormacoes.php';
         $of = new OutrasFormacoes();
@@ -17,7 +16,6 @@ class OutrasFormacoesController{
         return $r;
     }
 
-    // Método para o botão btnExcluirOF
     public function remover($id) {
         require_once 'Model/OutrasFormacoes.php';
         $of = new OutrasFormacoes();

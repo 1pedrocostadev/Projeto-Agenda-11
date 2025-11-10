@@ -5,17 +5,14 @@ if(!isset($_SESSION))
 }
 
 switch ($_POST) {
- //Caso a variavel seja nula mostrar tela de login
  case isset($_POST[null]):
  include_once "View/login.php"; 
  break;
 
- //---Primeiro Acesso--//
  case isset($_POST["btnPrimeiroAcesso"]):
  include_once "View/primeiroAcesso.php"; 
  break;
 
- //---Cadastrar--//
  case isset($_POST["btnCadastrar"]):
  require_once "Controller/UsuarioController.php"; 
  $uController = new UsuarioController();
@@ -32,7 +29,6 @@ switch ($_POST) {
  }
  break;
 
- //--Atualizar--//
  case isset($_POST["btnAtualizar"]):
  require_once "Controller/UsuarioController.php"; 
  $uController = new UsuarioController();
@@ -50,7 +46,6 @@ switch ($_POST) {
  }
  break;
 
- //--Login--//
  case isset($_POST["btnLogin"]):
  require_once "Controller/UsuarioController.php"; 
  $uController = new UsuarioController();
@@ -61,7 +56,6 @@ switch ($_POST) {
  }
  break;
 
- //--Adicionar Formacao--//
  case isset($_POST["btnAddFormacao"]):
  require_once "Controller/FormacaoAcadController.php"; 
  include_once "Model/Usuario.php"; 
@@ -79,7 +73,6 @@ switch ($_POST) {
  }
  break;
 
- //--Excluir Formacao-//
  case isset($_POST["btnExcluirFA"]):
  require_once "Controller/FormacaoAcadController.php"; 
  include_once "Model/Usuario.php"; 
@@ -91,7 +84,6 @@ switch ($_POST) {
  }
  break;
 
- //--Adicionar Experiencia Profissional-//
  case isset($_POST["btnAddEP"]):
  require_once "Controller/ExperienciaProfissionalController.php"; 
  include_once "Model/Usuario.php"; 
@@ -110,7 +102,6 @@ switch ($_POST) {
  }
  break;
 
- //--Excluir Experiencia Profissional-//
  case isset($_POST["btnExcluirEP"]):
  require_once "Controller/ExperienciaProfissionalController.php"; 
  include_once "Model/Usuario.php"; 
@@ -122,7 +113,6 @@ switch ($_POST) {
  }
  break;
  
- //--Adicionar Outra Formação--//
  case isset($_POST["btnAddOF"]):
     require_once "Controller/OutrasFormacoesController.php";
     include_once "Model/Usuario.php";
@@ -140,7 +130,6 @@ switch ($_POST) {
     }
     break;
 
- //--Excluir Outra Formação--//
  case isset($_POST["btnExcluirOF"]):
     require_once "Controller/OutrasFormacoesController.php";
     include_once "Model/Usuario.php";
@@ -152,12 +141,10 @@ switch ($_POST) {
     }
     break;
 
- // Botão "Login como Administrador" (da View/login.php)
  case isset($_POST["btnADM"]):
     include_once 'View/ADMLogin.php';
     break;
 
- // Botão "Entrar" (da View/ADMLogin.php) 
  case isset($_POST["btnLoginADM"]):
     require_once 'Controller/AdministradorController.php';
     $aController = new AdministradorController();
@@ -168,31 +155,26 @@ switch ($_POST) {
     }
     break;
 
- // Botão "Usuários Cadastrados" (da View/ADMPrincipal.php) 
  case isset($_POST["btnListarCadastrados"]):
     include_once 'View/ADMListarCadastrados.php';
     break;
 
- // Botão "Voltar" (das páginas ADMListarCadastrados e ADMListarAdministradores) 
  case isset($_POST["btnVoltar"]):
     include_once 'View/ADMPrincipal.php';
     break;
-
- // Botão "Listar Administradores" 
+ 
  case isset($_POST["btnListarADM"]):
     include_once 'View/ADMListarAdministradores.php';
     break;
 
- // Botão "Visualizar" 
  case isset($_POST["btnVisualizarUsuario"]):
     $_SESSION['idUsuarioVisualizar'] = $_POST['idUsuarioVisualizar'];
     include_once "View/ADMVisualizarCadastro.php";
     break;
 
- // Botão "Voltar para Lista" (da View/ADMVisualizarCadastro.php)
  case isset($_POST["btnVoltarADMLista"]):
     include_once "View/ADMListarCadastrados.php";
     break;
     
-} //Fim do switch
+}
 ?>

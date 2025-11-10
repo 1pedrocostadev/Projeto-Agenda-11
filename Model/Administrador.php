@@ -6,7 +6,6 @@ class Administrador
     private $cpf;
     private $senha;
 
-    // Getters e Setters
     public function setID($id) { $this->id = $id; }
     public function getID() { return $this->id; }
     public function setNome($nome) { $this->nome = $nome; }

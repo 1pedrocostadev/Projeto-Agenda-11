@@ -7,7 +7,6 @@ class FormacaoAcad
     private $fim;
     private $descricao;
 
-    // Getters e Setters
     public function setID($id) { $this->id = $id; }
     public function getID() { return $this->id; }
     public function setIdUsuario($idusuario) { $this->idusuario = $idusuario; }
@@ -19,7 +18,6 @@ class FormacaoAcad
     public function setDescricao($descricao) { $this->descricao = $descricao; }
     public function getDescricao() { return $this->descricao; }
 
-    // Métodos BD
     public function inserirBD()
     {
         require_once 'Model/ConexaoBD.php';
