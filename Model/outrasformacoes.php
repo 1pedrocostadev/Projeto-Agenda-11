@@ -7,73 +7,35 @@ class OutrasFormacoes
     private $fim;
     private $descricao;
 
-    public function setID($id)
-    {
-        $this->id = $id;
-    }
-    public function getID()
-    {
-        return $this->id;
-    }
+    // Getters e Setters
+    public function setID($id) { $this->id = $id; }
+    public function getID() { return $this->id; }
+    public function setIdUsuario($idusuario) { $this->idusuario = $idusuario; }
+    public function getIdUsuario() { return $this->idusuario; }
+    public function setInicio($inicio) { $this->inicio = $inicio; }
+    public function getInicio() { return $this->inicio; }
+    public function setFim($fim) { $this->fim = $fim; }
+    public function getFim() { return $this->fim; }
+    public function setDescricao($descricao) { $this->descricao = $descricao; }
+    public function getDescricao() { return $this->descricao; }
 
-    public function setIdUsuario($idusuario)
-    {
-        $this->idusuario = $idusuario;
-    }
-    public function getIdUsuario()
-    {
-        return $this->idusuario;
-    }
-
-    public function setInicio($inicio)
-    {
-        $this->inicio = $inicio;
-    }
-    public function getInicio()
-    {
-        return $this->inicio;
-    }
-
-    public function setFim($fim)
-    {
-        $this->fim = $fim;
-    }
-    public function getFim()
-    {
-        return $this->fim;
-    }
-
-    public function setDescricao($descricao)
-    {
-        $this->descricao = $descricao;
-    }
-    public function getDescricao()
-    {
-        return $this->descricao;
-    }
-
-
+    // Métodos BD
     public function inserirBD()
     {
-        require_once 'ConexaoBD.php';
+        require_once 'Model/ConexaoBD.php';
         $con = new ConexaoBD();
         $conn = $con->conectar();
         if ($conn->connect_error) {
             die("Connection failed: " . $conn->connect_error);
         }
 
-        $sql = "INSERT INTO outrasformacoes (idusuario, inicio, fim, descricao) VALUES (?, ?, ?, ?)";
-        $stmt = $conn->prepare($sql);
-        
-        $stmt->bind_param("isss", $this->idusuario, $this->inicio, $this->fim, $this->descricao);
+        $sql = "INSERT INTO outrasformacoes (idusuario, inicio, fim, descricao) VALUES ('".$this->idusuario."', '".$this->inicio."', '".$this->fim."', '".$this->descricao."')";
 
-        if ($stmt->execute()) {
-            $this->id = $conn->insert_id;
-            $stmt->close();
+        if ($conn->query($sql) === true) {
+            $this->id = mysqli_insert_id($conn);
             $conn->close();
             return true;
         } else {
-            $stmt->close();
             $conn->close();
             return false;
         }
@@ -81,52 +43,37 @@ class OutrasFormacoes
 
     public function excluirBD($id)
     {
-        require_once 'ConexaoBD.php';
+        require_once 'Model/ConexaoBD.php';
         $con = new ConexaoBD();
         $conn = $con->conectar();
         if ($conn->connect_error) {
             die("Connection failed: " . $conn->connect_error);
         }
 
-        $sql = "DELETE FROM outrasformacoes WHERE idoutrasformacoes = ?";
-        $stmt = $conn->prepare($sql);
-        
-        $stmt->bind_param("i", $id);
+        $sql = "DELETE FROM outrasformacoes WHERE idoutrasformacoes = '".$id."';";
 
-        if ($stmt->execute()) {
-            $stmt->close();
+        if ($conn->query($sql) === true) {
             $conn->close();
             return true;
         } else {
-            $stmt->close();
             $conn->close();
             return false;
         }
     }
-
-    public function listaOutrasFormacoes($idusuario)
+    
+    public function listaFormacoes($idusuario)
     {
-        require_once 'ConexaoBD.php';
+        require_once 'Model/ConexaoBD.php';
         $con = new ConexaoBD();
         $conn = $con->conectar();
         if ($conn->connect_error) {
             die("Connection failed: " . $conn->connect_error);
         }
 
-        
-        $sql = "SELECT * FROM outrasformacoes WHERE idusuario = ?";
-        $stmt = $conn->prepare($sql);
-        
-        
-        $stmt->bind_param("i", $idusuario);
-
-        $stmt->execute();
-        $re = $stmt->get_result();
-        
-        $stmt->close();
+        $sql = "SELECT * FROM outrasformacoes WHERE idusuario = '".$idusuario."'";
+        $re = $conn->query($sql);
         $conn->close();
         return $re;
     }
-
 }
 ?>

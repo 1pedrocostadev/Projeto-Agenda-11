@@ -7,79 +7,35 @@ class FormacaoAcad
     private $fim;
     private $descricao;
 
-    // CORREÇÃO: Todos os métodos foram movidos para DENTRO da classe.
+    // Getters e Setters
+    public function setID($id) { $this->id = $id; }
+    public function getID() { return $this->id; }
+    public function setIdUsuario($idusuario) { $this->idusuario = $idusuario; }
+    public function getIdUsuario() { return $this->idusuario; }
+    public function setInicio($inicio) { $this->inicio = $inicio; }
+    public function getInicio() { return $this->inicio; }
+    public function setFim($fim) { $this->fim = $fim; }
+    public function getFim() { return $this->fim; }
+    public function setDescricao($descricao) { $this->descricao = $descricao; }
+    public function getDescricao() { return $this->descricao; }
 
-    //ID
-    public function setID($id)
+    // Métodos BD
+    public function inserirBD()
     {
-        $this->id = $id;
-    }
-    public function getID()
-    {
-        return $this->id;
-    }
-
-    //idusuario
-    public function setIdUsuario($idusuario)
-    {
-        $this->idusuario = $idusuario;
-    }
-    public function getIdUsuario()
-    {
-        return $this->idusuario;
-    }
-
-    //inicio
-    public function setInicio($inicio)
-    {
-        $this->inicio = $inicio;
-    }
-    public function getInicio()
-    {
-        return $this->inicio;
-    }
-
-    //fim
-    public function setFim($fim)
-    {
-        $this->fim = $fim;
-    }
-    public function getFim()
-    {
-        return $this->fim;
-    }
-
-    //Descrição
-    public function setDescricao($descricao)
-    {
-        $this->descricao = $descricao;
-    }
-    public function getDescricao()
-    {
-        return $this->descricao;
-    }
-
-   public function inserirBD()
-    {
-        require_once 'ConexaoBD.php';
+        require_once 'Model/ConexaoBD.php';
         $con = new ConexaoBD();
         $conn = $con->conectar();
         if ($conn->connect_error) {
             die("Connection failed: " . $conn->connect_error);
         }
 
-        $sql = "INSERT INTO formacaoAcademica (idusuario, inicio, fim, descricao) VALUES (?, ?, ?, ?)";
-        $stmt = $conn->prepare($sql);
-        // "isss" = integer, string, string, string
-        $stmt->bind_param("isss", $this->idusuario, $this->inicio, $this->fim, $this->descricao);
+        $sql = "INSERT INTO formacaoacademica (idusuario, inicio, fim, descricao) VALUES ('".$this->idusuario."','".$this->inicio."','".$this->fim."','".$this->descricao."')";
 
-        if ($stmt->execute()) {
-            $this->id = $conn->insert_id;
-            $stmt->close();
+        if ($conn->query($sql) === true) {
+            $this->id = mysqli_insert_id($conn);
             $conn->close();
             return true;
         } else {
-            $stmt->close();
             $conn->close();
             return false;
         }
@@ -87,47 +43,33 @@ class FormacaoAcad
 
     public function excluirBD($id)
     {
-        require_once 'ConexaoBD.php';
+        require_once 'Model/ConexaoBD.php';
         $con = new ConexaoBD();
         $conn = $con->conectar();
         if ($conn->connect_error) {
             die("Connection failed: " . $conn->connect_error);
         }
-        
-        $sql = "DELETE FROM formacaoAcademica WHERE idformacaoAcademica = ?";
-        $stmt = $conn->prepare($sql);
-        // "i" = integer
-        $stmt->bind_param("i", $id);
-        
-        if ($stmt->execute()) {
-            $stmt->close();
+
+        $sql = "DELETE FROM formacaoacademica WHERE idformacaoAcademica = '".$id."';";
+
+        if ($conn->query($sql) === true) {
             $conn->close();
             return true;
         } else {
-            $stmt->close();
             $conn->close();
             return false;
         }
     }
 
-    public function listaFormacoes($idusuario)
-    {
-        require_once 'ConexaoBD.php';
+    public function listaFormacoes($idusuario) {
+        require_once 'Model/ConexaoBD.php';
         $con = new ConexaoBD();
         $conn = $con->conectar();
         if ($conn->connect_error) {
             die("Connection failed: " . $conn->connect_error);
         }
-        
-        $sql = "SELECT * FROM formacaoAcademica WHERE idusuario = ?";
-        $stmt = $conn->prepare($sql);
-        // "i" = integer
-        $stmt->bind_param("i", $idusuario);
-        
-        $stmt->execute();
-        $re = $stmt->get_result();
-        
-        $stmt->close();
+        $sql = "SELECT * FROM formacaoacademica WHERE idusuario = '".$idusuario."';";
+        $re = $conn->query($sql);
         $conn->close();
         return $re;
     }
