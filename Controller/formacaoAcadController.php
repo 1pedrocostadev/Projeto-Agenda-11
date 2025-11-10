@@ -1,17 +1,11 @@
 <?php
-
-if (!isset($_SESSION)) {
+if(!isset($_SESSION))
+{
     session_start();
 }
-
-// CORREÇÃO: Movido o 'require_once' para o topo.
-// É mais eficiente incluí-lo apenas uma vez, fora dos métodos.
-require_once '../Model/FormacaoAcad.php';
-
-class FormacaoAcadController
-{
-    public function inserir($inicio, $fim, $descricao, $idusuario)
-    {
+class FormacaoAcadController{
+    public function inserir($inicio, $fim, $descricao, $idusuario) {
+        require_once 'Model/FormacaoAcad.php'; 
         $formacao = new FormacaoAcad();
         $formacao->setInicio($inicio);
         $formacao->setFim($fim);
@@ -21,8 +15,8 @@ class FormacaoAcadController
         return $r;
     }
 
-    public function remover($id)
-    {
+    public function remover ($id) {
+        require_once 'Model/FormacaoAcad.php'; 
         $formacao = new FormacaoAcad();
         $r = $formacao->excluirBD($id);
         return $r;
@@ -30,11 +24,9 @@ class FormacaoAcadController
 
     public function gerarLista($idusuario)
     {
+        require_once 'Model/FormacaoAcad.php'; 
         $formacao = new FormacaoAcad();
-        
-        // Simplificado (não é um erro, apenas mais limpo)
-        return $formacao->listaFormacoes($idusuario);
+        return $results = $formacao->listaFormacoes($idusuario);
     }
 }
-
-// CORREÇÃO: Tag '?>' removida (boa prática para arquivos só de PHP)
+?>
